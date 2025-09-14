@@ -14,7 +14,7 @@ contract Bank {
         require(balances[msg.sender] != 0, "Insufficient funds");
 
         // Send ETH first
-        (bool success, ) = msg.sender.call{value: balances[msg.sender]}("");
+        (bool success,) = msg.sender.call{value: balances[msg.sender]}("");
         require(success, "ETH transfer failed");
 
         // Update balance after transfer (vulnerability!)
@@ -26,4 +26,3 @@ contract Bank {
         return address(this).balance;
     }
 }
-

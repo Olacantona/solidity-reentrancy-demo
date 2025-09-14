@@ -20,7 +20,7 @@ contract SafeBank is ReentrancyGuard {
         balances[msg.sender] = 0;
 
         // Interaction after state change
-        (bool success, ) = msg.sender.call{value: amount}("");
+        (bool success,) = msg.sender.call{value: amount}("");
         require(success, "ETH transfer failed");
     }
 }

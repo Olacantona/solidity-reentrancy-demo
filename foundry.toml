@@ -2,5 +2,12 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+rpc_url = "${https://sepolia.infura.io/v3/67cdda1d6f774dbdb60371995baf5e9c}"
+private_key = "${07062fa45932e3467fafff93ed54fc965b1b0106e5bfe57f524b88de6ddfd41e}"
+
+
+[etherscan]
+sepolia = { key = "9MN7598IT7K9E493ESUI2MW354S29EG2FY" }
+
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
