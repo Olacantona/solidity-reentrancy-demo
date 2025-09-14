@@ -34,7 +34,6 @@ contract BankTest is Test {
 
         emit log_named_uint("Bank balance after attack", address(bank).balance);
         emit log_named_uint("Attacker balance after attack", address(attacker).balance);
-
     }
 
     function testAttackFailsOnSafeBank() public {
